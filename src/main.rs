@@ -2,16 +2,40 @@ use std::env;
 
 mod filecontents;
 
+#[derive(Debug)]
+struct Config {
+    query: String,
+    file_path: String,
+}
+
+impl Config {
+    fn parse_arguments(args: &[String]) -> Self {
+        let query = match args.get(1) {
+            Some(arg) => arg,
+            None => "",
+        };
+        let file_path = match args.get(2) {
+            Some(arg) => arg,
+            None => "",
+        };
+
+        Self {
+            query: query.to_string(),
+            file_path: file_path.to_string(),
+        }
+    }
+}
+
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let query = &args[1];
-    let file_path = &args[2];
+    if args.len() < 3 {
+        panic!("Please provide the arguments; search_query file_path");
+    }
 
-    let file_contents = filecontents::get_contents_as_text(file_path);
+    let config = Config::parse_arguments(&args);
+    let file_contents = filecontents::get_contents_as_text(&config.file_path);
 
-    dbg!(query);
-    dbg!(file_path);
-    dbg!(args);
-    dbg!(file_contents);
+    println!("{}", file_contents.to_string());
+    dbg!(config.query);
 }
