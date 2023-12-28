@@ -1,47 +1,17 @@
 use std::env;
-use std::process;
 
-mod filecontents;
-
-#[derive(Debug)]
-struct Config {
-    query: String,
-    file_path: String,
-}
-
-impl Config {
-    fn parse_arguments(args: &[String]) -> Self {
-        let query = match args.get(1) {
-            Some(arg) => arg,
-            None => "",
-        };
-        let file_path = match args.get(2) {
-            Some(arg) => arg,
-            None => "",
-        };
-
-        Self {
-            query: query.to_string(),
-            file_path: file_path.to_string(),
-        }
-    }
-}
+use minigrep::config::Config;
+use minigrep::{handle_error, run};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
 
     if args.len() < 3 {
-        println!("Please provide the arguments; search_query file_path");
-        process::exit(1);
+        handle_error("Please provide the arguments: search_query file_path")
     }
 
     let config = Config::parse_arguments(&args);
-    let file_contents =
-        filecontents::get_contents_as_text(&config.file_path).unwrap_or_else(|err| {
-            println!("{}", err.to_string());
-            process::exit(1);
-        });
+    dbg!(&config.query);
 
-    println!("{}", file_contents.to_string());
-    dbg!(config.query);
+    run(config).unwrap_or_else(|err| handle_error(&err.to_string()));
 }
