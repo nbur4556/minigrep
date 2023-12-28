@@ -1,4 +1,5 @@
 use std::env;
+use std::process;
 
 mod filecontents;
 
@@ -30,11 +31,16 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     if args.len() < 3 {
-        panic!("Please provide the arguments; search_query file_path");
+        println!("Please provide the arguments; search_query file_path");
+        process::exit(1);
     }
 
     let config = Config::parse_arguments(&args);
-    let file_contents = filecontents::get_contents_as_text(&config.file_path);
+    let file_contents =
+        filecontents::get_contents_as_text(&config.file_path).unwrap_or_else(|err| {
+            println!("{}", err.to_string());
+            process::exit(1);
+        });
 
     println!("{}", file_contents.to_string());
     dbg!(config.query);
