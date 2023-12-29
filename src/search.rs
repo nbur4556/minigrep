@@ -14,8 +14,8 @@ mod tests {
     use super::*;
 
     const CONTENTS: &str = "\
-Lorem ipsum dolor sit amet, 
-qui minim labore adipisicing minim 
+Lorem ipsum dolor sit amet,
+qui minim labore adipisicing minim
 sint cillum sint consectetur cupidatat.
     ";
 
@@ -26,6 +26,18 @@ sint cillum sint consectetur cupidatat.
             vec!["sint cillum sint consectetur cupidatat."],
             search(query, CONTENTS)
         );
+    }
+
+    #[test]
+    fn finds_multiple_matching_lines() {
+        let query = "or";
+        assert_eq!(
+            vec![
+                "Lorem ipsum dolor sit amet,",
+                "qui minim labore adipisicing minim"
+            ],
+            search(query, CONTENTS)
+        )
     }
 
     #[test]

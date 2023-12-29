@@ -11,7 +11,5 @@ fn main() {
     }
 
     let config = Config::parse_arguments(&args);
-    dbg!(&config.query);
-
     run(config).unwrap_or_else(|err| handle_error(&err.to_string()));
 }
