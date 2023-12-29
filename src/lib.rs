@@ -3,6 +3,7 @@ use std::process;
 
 pub mod config;
 mod filecontents;
+mod search;
 
 pub fn run(config: config::Config) -> Result<(), Box<dyn Error>> {
     let file_contents = filecontents::get_contents_as_text(&config.file_path)?;
