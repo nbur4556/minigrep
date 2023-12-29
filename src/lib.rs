@@ -22,6 +22,6 @@ pub fn run(config: config::Config) -> Result<(), Box<dyn Error>> {
 }
 
 pub fn handle_error(error: &str) {
-    println!("{}", error);
+    eprintln!("{}", error);
     process::exit(1);
 }
