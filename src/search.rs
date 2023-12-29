@@ -1,7 +1,18 @@
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn case_sensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut acc: Vec<&'a str> = Vec::new();
     for line in contents.lines() {
         if line.contains(query) {
+            acc.push(line);
+        }
+    }
+
+    acc
+}
+
+pub fn case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let mut acc: Vec<&'a str> = Vec::new();
+    for line in contents.lines() {
+        if line.to_lowercase().contains(&query.to_lowercase()) {
             acc.push(line);
         }
     }
@@ -24,7 +35,7 @@ sint cillum sint consectetur cupidatat.
         let query = "sint";
         assert_eq!(
             vec!["sint cillum sint consectetur cupidatat."],
-            search(query, CONTENTS)
+            case_sensitive(query, CONTENTS)
         );
     }
 
@@ -36,7 +47,7 @@ sint cillum sint consectetur cupidatat.
                 "Lorem ipsum dolor sit amet,",
                 "qui minim labore adipisicing minim"
             ],
-            search(query, CONTENTS)
+            case_sensitive(query, CONTENTS)
         )
     }
 
@@ -44,6 +55,15 @@ sint cillum sint consectetur cupidatat.
     fn empty_vec_on_no_matching_lines() {
         let query = "nomatch";
         let empty: Vec<&str> = Vec::new();
-        assert_eq!(empty, search(query, CONTENTS));
+        assert_eq!(empty, case_sensitive(query, CONTENTS));
+    }
+
+    #[test]
+    fn should_find_case_insensitive_matching_lines() {
+        let query = "lorem";
+        assert_eq!(
+            vec!["Lorem ipsum dolor sit amet,"],
+            case_insensitive(query, CONTENTS),
+        );
     }
 }
