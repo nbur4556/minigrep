@@ -1,12 +1,8 @@
 pub fn case_sensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut acc: Vec<&'a str> = Vec::new();
-    for line in contents.lines() {
-        if line.contains(query) {
-            acc.push(line);
-        }
-    }
-
-    acc
+    contents
+        .lines()
+        .filter(|line| line.contains(query))
+        .collect()
 }
 
 pub fn case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
